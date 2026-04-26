@@ -1,49 +1,68 @@
-// Dino game code with fixes applied
+function drawRealisticDino(ctx) {
+    // Draw the body
+    ctx.beginPath();
+    ctx.fillStyle = '#4CAF50';
+    ctx.moveTo(50, 150);
+    ctx.lineTo(70, 130);
+    ctx.lineTo(90, 130);
+    ctx.lineTo(110, 150);
+    ctx.lineTo(100, 170);
+    ctx.lineTo(70, 170);
+    ctx.closePath();
+    ctx.fill();
 
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+    // Draw the head
+    ctx.beginPath();
+    ctx.fillStyle = '#4CAF50';
+    ctx.arc(30, 130, 20, 0, Math.PI * 2);
+    ctx.fill();
 
-const dinoImage = new Image();
-dinoImage.src = 'dino.png';
+    // Draw the eye
+    ctx.beginPath();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.arc(25, 125, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.fillStyle = '#000000';
+    ctx.arc(25, 125, 2, 0, Math.PI * 2);
+    ctx.fill();
 
-const dinoInitialState = {
-    x: 50,
-    y: canvas.height - 100,
-    dy: 0,
-    grounded: true
-};
+    // Draw the tail
+    ctx.beginPath();
+    ctx.moveTo(50, 150);
+    ctx.lineTo(20, 160);
+    ctx.lineTo(30, 150);
+    ctx.closePath();
+    ctx.fill();
 
-let dinoState = {...dinoInitialState};
+    // Draw the legs
+    ctx.beginPath();
+    ctx.moveTo(70, 170);
+    ctx.lineTo(60, 200);
+    ctx.lineTo(80, 200);
+    ctx.lineTo(70, 170);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(90, 170);
+    ctx.lineTo(80, 200);
+    ctx.lineTo(100, 200);
+    ctx.lineTo(90, 170);
+    ctx.closePath();
+    ctx.fill();
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(dinoImage, dinoState.x, dinoState.y);
+    // Draw claws
+    ctx.fillStyle = '#FFD700';
+    ctx.beginPath();
+    ctx.moveTo(70, 200);
+    ctx.lineTo(75, 210);
+    ctx.lineTo(80, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(90, 200);
+    ctx.lineTo(95, 210);
+    ctx.lineTo(100, 200);
+    ctx.closePath();
+    ctx.fill();
 }
-
-function update() {
-    if (!dinoState.grounded) {
-        dinoState.dy += 1; // Gravity
-    }
-    dinoState.y += dinoState.dy;
-    if (dinoState.y >= canvas.height - 100) {
-        dinoState.y = canvas.height - 100;
-        dinoState.grounded = true;
-    }
-    draw();
-}
-
-function restartGame() {
-    dinoState = {...dinoInitialState};
-    update(); // initial draw call after reset
-}
-
-// Event listeners and game loop can be added here
-
-function gameLoop() {
-    update();
-    requestAnimationFrame(gameLoop);
-}
-
-// Start the game
-restartGame();
-gameLoop();
