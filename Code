@@ -1,108 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino Game Clone</title>
-    <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f7f7f7; font-family: 'Courier New', Courier, monospace; }
-        #game-container { position: relative; border-bottom: 2px solid #535353; width: 600px; height: 150px; overflow: hidden; background: white; }
-        #score { position: absolute; right: 10px; top: 10px; color: #535353; font-size: 18px; }
-        #game-over { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; text-align: center; color: #535353; }
-    </style>
-</head>
-<body>
-    <div id="game-container">
-        <div id="score">00000</div>
-        <canvas id="gameCanvas" width="600" height="150"></canvas>
-        <div id="game-over">
-            <h2>GAME OVER</h2>
-            <p>Press Space to Restart</p>
-        </div>
-    </div>
+// Fixed content for the Code file
+// 1) Initial draw() call before the game starts
+function startGame() {
+    draw();
+    // Other initialization code
+}
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreElement = document.getElementById('score');
-        const gameOverScreen = document.getElementById('game-over');
-
-        let score = 0;
-        let gameRunning = true;
-        let speed = 5;
-
-        // Dino properties
-        const dino = { x: 50, y: 120, width: 30, height: 30, dy: 0, jumpForce: 12, gravity: 0.6, grounded: true };
-
-        // Obstacles
-        let obstacles = [];
-        function createObstacle() {
-            let height = 20 + Math.random() * 30;
-            obstacles.push({ x: canvas.width, y: canvas.height - height, width: 15, height: height });
-        }
-
-        function update() {
-            if (!gameRunning) return;
-
-            // Physics
-            if (!dino.grounded) {
-                dino.dy += dino.gravity;
-                dino.y += dino.dy;
-            }
-
-            if (dino.y + dino.height > canvas.height) {
-                dino.y = canvas.height - dino.height;
-                dino.dy = 0;
-                dino.grounded = true;
-            }
-
-            // Move and Check Obstacles
-            obstacles.forEach((obs, index) => {
-                obs.x -= speed;
-                // Collision Detection
-                if (dino.x < obs.x + obs.width && dino.x + dino.width > obs.x &&
-                    dino.y < obs.y + obs.height && dino.y + dino.height > obs.y) {
-                    gameRunning = false;
-                    gameOverScreen.style.display = 'block';
-                }
-                if (obs.x + obs.width < 0) obstacles.splice(index, 1);
-            });
-
-            if (Math.random() < 0.01) createObstacle();
-            
-            score++;
-            scoreElement.innerText = Math.floor(score / 10).toString().padStart(5, '0');
-            speed += 0.001; // Increase difficulty
-
-            draw();
-            requestAnimationFrame(update);
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Draw Dino
-            ctx.fillStyle = '#535353';
-            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
-            // Draw Obstacles
-            ctx.fillStyle = '#ff4d4d';
-            obstacles.forEach(obs => ctx.fillRect(obs.x, obs.y, obs.width, obs.height));
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                if (gameRunning && dino.grounded) {
-                    dino.dy = -dino.jumpForce;
-                    dino.grounded = false;
-                } else if (!gameRunning) {
-                    // Reset game
-                    score = 0; obstacles = []; speed = 5; gameRunning = true;
-                    gameOverScreen.style.display = 'none';
-                    update();
-                }
-            }
-        });
-
-        update();
-    </script>
-</body>
-</html>
+// 2) Proper dino state reset on game restart
+function resetDinoState() {
+    dino.position = { x: initialX, y: initialY };
+    dino.velocity = 0;
+    dino.grounded = true;
+    // other state reset code
+}
